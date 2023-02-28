@@ -40,19 +40,20 @@ function App() {
   // }, []);
 
   const fetchMoviesHandler = async () => {
+    setIsLoading(true);
     const response = await fetch("https://swapi.dev/api/films");
-    const data = await response.json()
-   
-      const transformData = data.results.map((moviesData) => {
-        return {
-          id: moviesData.episode_id,
-          title: moviesData.title,
-          openingText: moviesData.opening_crawl,
-          releaseDate: moviesData.release_date,
-        };
-      });
-      setMovies(transformData);
-   
+    const data = await response.json();
+
+    const transformData = data.results.map((moviesData) => {
+      return {
+        id: moviesData.episode_id,
+        title: moviesData.title,
+        openingText: moviesData.opening_crawl,
+        releaseDate: moviesData.release_date,
+      };
+    });
+    setMovies(transformData);
+    setIsLoading(false);
   };
 
   useEffect(() => {
