@@ -40,41 +40,47 @@ function App() {
   // }, []);
 
   const fetchMoviesHandler = async () => {
-    setIsLoading(true);
-    const response = await fetch("https://swapi.dev/api/films");
-    const data = await response.json();
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await fetch("https://swapi.dev/api/films");
+      if (!response.ok) throw new Error("Something went Wrong");
 
-    const transformData = data.results.map((moviesData) => {
-      return {
-        id: moviesData.episode_id,
-        title: moviesData.title,
-        openingText: moviesData.opening_crawl,
-        releaseDate: moviesData.release_date,
-      };
-    });
-    setMovies(transformData);
-    setIsLoading(false);
+      const data = await response.json();
+      const transformData = data.results.map((moviesData) => {
+        return {
+          id: moviesData.episode_id,
+          title: moviesData.title,
+          openingText: moviesData.opening_crawl,
+          releaseDate: moviesData.release_date,
+        };
+      });
+      setMovies(transformData);
+      setIsLoading(false);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
-  useEffect(() => {
-    fetchMoviesHandler();
-  }, [fetchMoviesHandler]);
+  // useEffect(() => {
+  //   fetchMoviesHandler();
+  // }, [fetchMoviesHandler]);
 
-  const addMovieHandler = async (movie) => {
-    const response = await fetch(
-      "https://movito10-default-rtdb.firebaseio.com/movies.json",
+  // const addMovieHandler = async (movie) => {
+  //   const response = await fetch(
+  //     "https://movito10-default-rtdb.firebaseio.com/movies.json",
 
-      {
-        method: "POST",
-        body: JSON.stringify(movie),
-        headers: {
-          "Context-Type": "application/json",
-        },
-      }
-    );
+  //     {
+  //       method: "POST",
+  //       body: JSON.stringify(movie),
+  //       headers: {
+  //         "Context-Type": "application/json",
+  //       },
+  //     }
+  //   );
 
-    fetchMoviesHandler();
-  };
+  //   fetchMoviesHandler();
+  // };
 
   let content = <p>Found no movies.</p>;
 
@@ -82,9 +88,9 @@ function App() {
     content = <MoviesList movies={movies} />;
   }
 
-  if (error) {
-    content = <p>{error}</p>;
-  }
+  // if (error) {
+  //   content = <p>{error}</p>;
+  // }
 
   if (isLoading) {
     content = <p>Loading...</p>;
@@ -93,7 +99,7 @@ function App() {
   return (
     <React.Fragment>
       <section>
-        <AddMovie onAddMovie={addMovieHandler} />
+        {/* <AddMovie onAddMovie={addMovieHandler} /> */}
       </section>
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
