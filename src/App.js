@@ -44,7 +44,9 @@ function App() {
       setIsLoading(true);
       setError(null);
       const response = await fetch("https://swapi.dev/api/films");
-      if (!response.ok) throw new Error("Something went Wrong");
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
 
       const data = await response.json();
       const transformData = data.results.map((moviesData) => {
@@ -56,15 +58,19 @@ function App() {
         };
       });
       setMovies(transformData);
-      setIsLoading(false);
-    } catch (error) {
-      setError(error.message);
+    } catch (errors) {
+      setError(errors.message);
     }
+    setIsLoading(false);
   };
 
-  // useEffect(() => {
-  //   fetchMoviesHandler();
-  // }, [fetchMoviesHandler]);
+  useEffect(
+    () => {
+      fetchMoviesHandler();
+    },
+    []
+    // [fetchMoviesHandler]
+  );
 
   // const addMovieHandler = async (movie) => {
   //   const response = await fetch(
@@ -88,19 +94,16 @@ function App() {
     content = <MoviesList movies={movies} />;
   }
 
-  // if (error) {
-  //   content = <p>{error}</p>;
-  // }
-
+  if (error) {
+    content = <p>{error}</p>;
+  }
   if (isLoading) {
     content = <p>Loading...</p>;
   }
 
   return (
     <React.Fragment>
-      <section>
-        {/* <AddMovie onAddMovie={addMovieHandler} /> */}
-      </section>
+      <section>{/* <AddMovie onAddMovie={addMovieHandler} /> */}</section>
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
