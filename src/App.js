@@ -39,7 +39,7 @@ function App() {
   //   setIsLoading(false);
   // }, []);
 
-  const fetchMoviesHandler = async () => {
+  const fetchMoviesHandler = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -62,15 +62,11 @@ function App() {
       setError(errors.message);
     }
     setIsLoading(false);
-  };
+  }, []);
 
-  useEffect(
-    () => {
-      fetchMoviesHandler();
-    },
-    []
-    // [fetchMoviesHandler]
-  );
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, [fetchMoviesHandler]);
 
   // const addMovieHandler = async (movie) => {
   //   const response = await fetch(
